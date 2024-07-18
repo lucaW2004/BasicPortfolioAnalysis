@@ -4,14 +4,14 @@
 #' @param portfolio_data A data frame containing the different positions of the portfolio and the values for the metrics for each year.
 #' It has to contain the values for at least three years for each position and it has to contain the values for the annual returns for each position.
 #' On top of that it can contain the following metrics as columns:
-#' \item{year_}{obligatory, as already described}
-#' \item{annual_return_year_}{obligatory, as already described}
-#' \item{volatility}{Volatility measures the range of returns of an investment}
-#' \item{sharpe_ratio}{The Sharpe Ratio measures the risk-adjusted return of a portfolio}
-#' \item{max_drawdown}{Maximum Drawdown measures the maximum loss from the peak to the trough of a portfolio over a specific period}
-#' \item{cagr}{CAGR represents the average annual growth rate of an investment over a specific period}
-#' \item{alpha}{Alpha measures the excess return of a portfolio compared to a benchmark index}
-#' \item{beta}{Beta measures the sensitivity of a portfolio compared to the overall market. A beta greater than 1 indicates the portfolio is more volatile than the market}
+#' year_ : obligatory, as already described
+#' annual_return_year_ : obligatory, as already described
+#' volatility : Volatility measures the range of returns of an investment
+#' sharpe_ratio : The Sharpe Ratio measures the risk-adjusted return of a portfolio
+#' max_drawdown : Maximum Drawdown measures the maximum loss from the peak to the trough of a portfolio over a specific period
+#' cagr : CAGR represents the average annual growth rate of an investment over a specific period
+#' alpha : Alpha measures the excess return of a portfolio compared to a benchmark index
+#' beta : Beta measures the sensitivity of a portfolio compared to the overall market. A beta greater than 1 indicates the portfolio is more volatile than the market
 #' It has to be formatted like the ouput of the calculate_portfolio_metrics function from this package
 #' @return No values are being returned. Only the plots are shown
 #' @examples
