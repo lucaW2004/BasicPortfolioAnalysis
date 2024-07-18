@@ -22,11 +22,11 @@
 #'  year_0 = c(950, 1500, 1350),
 #'  year_1 = c(1000, 1200, 1500),
 #'  year_2 = c(1100, 2100, 1600),
-#'  year_3 = c(1200, 2200, 1700),
+#'  year_3 = c(1200, 2200, 1700)
 #')
 #'risk_free_rate <- 2
 #'market_returns <- c(3,5, 6)
-#'portfolio_metrics <- calculate_portfolio_metrics(portfolio_data, risk_free_rate, market_returns, alpha=FALSE, beta=FALSE, cagr=FALSE, vola=FALSE)
+#'portfolio_metrics <- calculate_portfolio_metrics(portfolio_data, risk_free_rate, market_returns)
 #'
 #'print(portfolio_metrics)
 #' @export

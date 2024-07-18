@@ -29,7 +29,6 @@
 #' visualize_portfolio(portfolio_data, risk_free_rate, market_returns)
 #' @export
 visualize_portfolio <- function(portfolio_data, risk_free_rate, market_returns) {
-  #processed_portfolio <- portfolioAnalysisr::calculate_portfolio_metrics(portfolio_data, risk_free_rate, market_returns)
-  print("hello")
-  #show_portfolio_metrics <- portfolioAnalysisr::show_portfolio_metrics(processed_portfolio)
+  processed_portfolio <- portfolioAnalysisr::calculate_portfolio_metrics(portfolio_data, risk_free_rate, market_returns)
+  portfolioAnalysisr::show_portfolio_metrics(processed_portfolio)
 }

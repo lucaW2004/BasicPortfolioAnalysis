@@ -26,6 +26,7 @@
 #' portfolio_metrics <- calculate_portfolio_metrics(portfolio_data, risk_free_rate, market_returns)
 #'
 #' show_portfolio_metrics(portfolio_metrics)
+#' @export
 show_portfolio_metrics <- function(portfolio_data) {
   library(ggplot2)
   library(reshape2)
