@@ -35,39 +35,39 @@ calculate_portfolio_metrics <- function(portfolio_data, risk_free_rate, market_r
 
   years <- ncol(portfolio_data)-1
 
-  # Überprüfen, ob die Eingabewerte gültig sind
+  # check if inputs are valid
   if (years <= 0) {
     stop("Die Anzahl der Jahre muss positiv sein.")
   }
 
-  # Sicherstellen, dass das DataFrame die erforderlichen Spalten enthält
+  # check if data frame contains necessary columns
   required_columns <- c("position", paste0("year_", 0:(years-1)))
   if (!all(required_columns %in% colnames(portfolio_data))) {
-    stop(paste("Das DataFrame muss die folgenden Spalten enthalten:", paste(required_columns, collapse = ", ")))
+    stop(paste("The data frame has to contain the following columns:", paste(required_columns, collapse = ", ")))
   }
 
-  # Zeile für das gesamte Portfolio hinzufügen
+  # add row for whole portfolio
   yearly_total_returns <- colSums(portfolio_data[,-1])
   total_row <- c("Portfolio", yearly_total_returns)
   portfolio_data <- rbind(portfolio_data, total_row)
   portfolio_data[,-1] <- lapply(portfolio_data[,-1], as.numeric)
 
-  # Berechnung der jährlichen Renditen für jede Position und das gesamte Portfolio
+  # calculate annual returns
   for (i in 0:(years - 2)) {
     value_prev_year <- portfolio_data[[paste0("year_", i)]]
     if(0 %in% value_prev_year) stop("position value cannot be equal to zero when calculating annual returns")
     portfolio_data[[paste0("annual_return_year_", i+1)]] <- ((portfolio_data[[paste0("year_", i + 1)]] / value_prev_year) - 1) * 100
   }
 
-  # Berechnung der Volatilität (Standardabweichung der jährlichen Renditen)
+  # calculate volatility
   portfolio_data$volatility <- apply(portfolio_data[, paste0("annual_return_year_", 1:(years-1))], 1, sd)
 
-  # Berechnung der Sharpe Ratio
+  # calculate Sharpe Ratio
   portfolio_volatility <- portfolio_data$volatility
   if (0 %in% portfolio_volatility) stop("volatily cannot be equal to zero when calculating the sharpe ratio")
   portfolio_data$sharpe_ratio <- (rowMeans(portfolio_data[, paste0("annual_return_year_", 1:(years-1))]) - risk_free_rate) / portfolio_volatility
 
-  # Berechnung des Maximum Drawdown
+  # calculate Maximum Drawdown
   portfolio_data$max_drawdown <- apply(portfolio_data[, paste0("year_", 0:(years-1))], 1, function(x) {
     max_drawdown <- 0
     peak <- x[1]
@@ -80,19 +80,19 @@ calculate_portfolio_metrics <- function(portfolio_data, risk_free_rate, market_r
     return(max_drawdown * 100)
   })
 
-  # Berechnung des CAGR
+  # calculate CAGR
   initial_val <- portfolio_data[[paste0("year_", 0)]]
   if(0 %in% initial_val) stop("initial value of the position cannot be zero when calculating CAGR")
   portfolio_data$cagr <- ((portfolio_data[[paste0("year_", (years-1))]] / initial_val)^(1 / years) - 1) * 100
 
-  # Berechnung von Beta und Alpha
+  # calculate Beta and Alpha
   annual_returns_matrix <- as.matrix(portfolio_data[, paste0("annual_return_year_", 1:(years-1))])
   market_returns_len <- length(market_returns)
   if(market_returns_len != years-1 & market_returns_len > 0 ){
     stop("market_returns parameter has to have one value less than the portfolio_data parameter has years")
   }
 
-  # Berechnung Beta
+  # calculate Beta
   market_returns_var = var(market_returns)
   if(market_returns_var==0){
     stop("variance of market returns has to be greater 0 when calculating beta")
@@ -101,9 +101,9 @@ calculate_portfolio_metrics <- function(portfolio_data, risk_free_rate, market_r
     cov(x, market_returns) / var(market_returns)
   })
 
-  # Berechnung Alpha
+  # calculate Alpha
   portfolio_data$alpha <- rowMeans(annual_returns_matrix) - (risk_free_rate + portfolio_data$beta * (mean(market_returns) - risk_free_rate))
 
-  # Rückgabe des DataFrames mit allen Kennzahlen
+  # return datafram with all calculated metrics
   return(portfolio_data)
 }

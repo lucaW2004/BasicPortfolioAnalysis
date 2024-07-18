@@ -31,35 +31,35 @@ show_portfolio_metrics <- function(portfolio_data) {
   library(ggplot2)
   library(reshape2)
   library(ggpubr)
-  # Schmelzen des DataFrames für die jährlichen Renditen
+  # melt the data frames for the annual returns
   annual_returns_data <- melt(portfolio_data, id.vars = "position", measure.vars = grep("annual_return_year_", colnames(portfolio_data), value = TRUE))
 
   annual_value_positions <- melt(subset(portfolio_data, position != "Portfolio"), id.vars = "position", measure.vars = grep("^year_", colnames(portfolio_data), value = TRUE))
 
   annual_value_portfolio <- melt(subset(portfolio_data, position == "Portfolio"), id.vars = "position", measure.vars = grep("^year_", colnames(portfolio_data), value = TRUE))
 
-  # Plot der Entwicklung der Werte aller Positionen
+  # plot value of distinct positions in portfolio
   p0 <- ggplot(annual_value_positions, aes(x = variable, y = value, color = position, group = position)) +
     geom_line() +
     geom_point() +
     scale_x_discrete(guide = guide_axis(n.dodge=2)) +
-    labs(title = "Jährlicher Wert der einzelnen Positionen", x = "Jahr", y = "Wert") +
+    labs(title = "Value of distinct positions", x = "Year", y = "Value") +
     theme_minimal()
 
-  # Plot der Entwicklung des gesamten Portfolios
+  # plot value of whole portfolio
   p1 <- ggplot(annual_value_portfolio, aes(x = variable, y = value, group = position)) +
     geom_line() +
     geom_point() +
     scale_x_discrete(guide = guide_axis(n.dodge=2)) +
-    labs(title = "Jährlicher Wert des gesamten Portfolios", x = "Jahr", y = "Wert") +
+    labs(title = "Value of whole portfolio", x = "Year", y = "Value") +
     theme_minimal()
 
-  # Plot der jährlichen Renditen
+  # plot annual returns
   p2 <- ggplot(annual_returns_data, aes(x = variable, y = value, color = position, group = position)) +
     geom_line() +
     geom_point() +
     scale_x_discrete(guide = guide_axis(n.dodge=3)) +
-    labs(title = "Jährliche Renditen", x = "Jahr", y = "Rendite (%)") +
+    labs(title = "Annual Return", x = "Jahr", y = "Return (%)") +
     theme_minimal()
 
   # Define list of plots to be shown
@@ -69,14 +69,14 @@ show_portfolio_metrics <- function(portfolio_data) {
   if("volatility" %in% colnames(portfolio_data)){
     p3 <- ggplot(portfolio_data, aes(x = position, y = volatility, fill = position)) +
       geom_bar(stat = "identity") +
-      labs(title = "Volatilität", x = "Position", y = "Volatilität (%)") +
+      labs(title = "Volatility", x = "Position", y = "Volatility (%)") +
       theme_minimal() +
       theme(legend.position = "none")
 
     plot_list[[length(plot_list)+1]] <- p3
   }
 
-  # Plot der Sharpe Ratio
+  # Plot Sharpe Ratio
   if("sharpe_ratio" %in% colnames(portfolio_data)){
     p4 <- ggplot(portfolio_data, aes(x = position, y = sharpe_ratio, fill = position)) +
       geom_bar(stat = "identity") +
@@ -87,7 +87,7 @@ show_portfolio_metrics <- function(portfolio_data) {
     plot_list[[length(plot_list)+1]] <- p4
   }
 
-  # Plot des Maximum Drawdown
+  # Plot Maximum Drawdown
   if("max_drawdown" %in% colnames(portfolio_data)){
     p5 <- ggplot(portfolio_data, aes(x = position, y = max_drawdown, fill = position)) +
       geom_bar(stat = "identity") +
@@ -98,7 +98,7 @@ show_portfolio_metrics <- function(portfolio_data) {
     plot_list[[length(plot_list)+1]] <- p5
   }
 
-  # Plot des CAGR
+  # Plot CAGR
   if("cagr" %in% colnames(portfolio_data)){
     p6 <- ggplot(portfolio_data, aes(x = position, y = cagr, fill = position)) +
       geom_bar(stat = "identity") +
@@ -109,7 +109,7 @@ show_portfolio_metrics <- function(portfolio_data) {
     plot_list[[length(plot_list)+1]] <- p6
   }
 
-  # Plot des Beta
+  # Plot Beta
   if("beta" %in% colnames(portfolio_data)){
     p7 <- ggplot(portfolio_data, aes(x = position, y = beta, fill = position)) +
       geom_bar(stat = "identity") +
@@ -120,7 +120,7 @@ show_portfolio_metrics <- function(portfolio_data) {
     plot_list[[length(plot_list)+1]] <- p7
   }
 
-  # Plot des Alpha
+  # Plot Alpha
   if("alpha" %in% colnames(portfolio_data)){
     p8 <- ggplot(portfolio_data, aes(x = position, y = alpha, fill = position)) +
       geom_bar(stat = "identity") +
@@ -131,7 +131,7 @@ show_portfolio_metrics <- function(portfolio_data) {
     plot_list[[length(plot_list)+1]] <- p8
   }
 
-  # Anzeigen der Plots
+  # Show the plots
   f <- ggarrange(plotlist=plot_list, nrow=2, ncol=1)
   f
 }
